@@ -8,10 +8,17 @@ patch(FormRenderer.prototype, {
         onMounted(() => this._mounted());
     },
     _mounted() {
-        $("div.o_form_view_container").resizable({
-            handles: "e",
-            minWidth: 400,
-            maxWidth: 1200,
-        });
+        // Odoo 17 : jQuery UI (.resizable) a été retiré des assets et la classe
+        // o_form_view_container n'existe plus. Patch défensif : sans le plugin
+        // resizable on ne fait rien — sinon onMounted lève une OwlError qui fait
+        // planter le rendu de TOUTES les vues formulaire (cf. smoke-test V5).
+        const $container = $("div.o_form_view_container");
+        if ($container.length && typeof $container.resizable === "function") {
+            $container.resizable({
+                handles: "e",
+                minWidth: 400,
+                maxWidth: 1200,
+            });
+        }
     },
 });
