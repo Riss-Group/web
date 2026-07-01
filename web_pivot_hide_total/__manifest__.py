@@ -12,8 +12,11 @@
     "website": "https://github.com/OCA/web",
     "depends": ["web"],
     "data": [],
+    # Odoo 18 : le JS des vues pivot (@web/views/pivot/*) a migré de
+    # web.assets_backend vers web.assets_backend_lazy -> ce patch doit être dans
+    # le même bundle, sinon "module not defined" (pivot pas encore chargé).
     "assets": {
-        "web.assets_backend": [
+        "web.assets_backend_lazy": [
             "web_pivot_hide_total/static/src/**/*",
         ],
     },
